@@ -54,7 +54,7 @@
     // add internal Javascript Object
     InternalApis *  interalApis= [[InternalApis alloc] init];
     interalApis.webview=self;
-    [self addJavascriptObject:interalApis namespace:@"_dsb"];
+    [self addJavascriptObject:interalApis nameSpace:@"_dsb"];
     return self;
 }
 
@@ -350,11 +350,11 @@ initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL))completi
 -(void)callHandler:(NSString *)methodName arguments:(NSArray *)args completionHandler:(void (^)(id  _Nullable value))completionHandler
 {
     DSCallInfo *callInfo=[[DSCallInfo alloc] init];
-    callInfo.id=[NSNumber numberWithInt: callId++];
+    callInfo.Id=[NSNumber numberWithInt: callId++];
     callInfo.args=args==nil?@[]:args;
     callInfo.method=methodName;
     if(completionHandler){
-        [handerMap setObject:completionHandler forKey:callInfo.id];
+        [handerMap setObject:completionHandler forKey:callInfo.Id];
     }
     if(callInfoList!=nil){
         [callInfoList addObject:callInfo];
@@ -372,26 +372,26 @@ initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL))completi
 }
 
 - (void) dispatchJavascriptCall:(DSCallInfo*) info{
-    NSString * json=[JSBUtil objToJsonString:@{@"method":info.method,@"callbackId":info.id,
+    NSString * json=[JSBUtil objToJsonString:@{@"method":info.method,@"callbackId":info.Id,
                                                @"data":[JSBUtil objToJsonString: info.args]}];
     [self evaluateJavaScript:[NSString stringWithFormat:@"window._handleMessageFromNative(%@)",json]
            completionHandler:nil];
 }
 
-- (void) addJavascriptObject:(id)object namespace:(NSString *)namespace{
-    if(namespace==nil){
-        namespace=@"";
+- (void) addJavascriptObject:(id)object nameSpace:(NSString * _Nullable)nameSpace {
+    if(nameSpace==nil){
+        nameSpace=@"";
     }
     if(object!=NULL){
-        [javaScriptNamespaceInterfaces setObject:object forKey:namespace];
+        [javaScriptNamespaceInterfaces setObject:object forKey:nameSpace];
     }
 }
 
-- (void) removeJavascriptObject:(NSString *)namespace {
-    if(namespace==nil){
-        namespace=@"";
+- (void) removeJavascriptObject:(NSString *)nameSpace {
+    if(nameSpace==nil){
+        nameSpace=@"";
     }
-    [javaScriptNamespaceInterfaces removeObjectForKey:namespace];
+    [javaScriptNamespaceInterfaces removeObjectForKey:nameSpace];
 }
 
 - (void)customJavascriptDialogLabelTitles:(NSDictionary *)dic{
