@@ -50,11 +50,11 @@
 }
 
 //return method name for xxx: or xxx:handle:
-+(NSString *)methodByNameArg:(NSInteger)argNum selName:(NSString *)selName class:(Class)class
++(NSString *)methodByNameArg:(NSInteger)argNum selName:(NSString *)selName methodClass:(Class)methodClass
 {
     NSString *result = nil;
-    if(class){
-        NSArray *arr = [JSBUtil allMethodFromClass:class];
+    if(methodClass){
+        NSArray *arr = [JSBUtil allMethodFromClass:methodClass];
         for (int i=0; i<arr.count; i++) {
             NSString *method = arr[i];
             NSArray *tmpArr = [method componentsSeparatedByString:@":"];
